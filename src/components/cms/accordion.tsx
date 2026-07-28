@@ -1,10 +1,15 @@
 import { component$, useTask$, useVisibleTask$ } from "@builder.io/qwik";
 
-export const Accordion = component$(() => {
+interface AccordionProps {
+  title: string;
+  text: string;
+}
+
+export const Accordion = component$<AccordionProps>((props) => {
   useTask$(() => console.log('Accordion useTask$'));
   useVisibleTask$(() => console.log('Accordion useVisibleTask$'));
 
   return (
-    <div>Accordion</div>
+    <div>Accordion: {props.title} / {props.text}</div>
   )
 });

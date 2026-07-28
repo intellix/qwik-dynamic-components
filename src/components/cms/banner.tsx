@@ -1,10 +1,14 @@
 import { component$, useTask$, useVisibleTask$ } from "@builder.io/qwik";
 
-export const Banner = component$(() => {
+interface BannerProps {
+  image: string;
+}
+
+export const Banner = component$<BannerProps>((props) => {
   useTask$(() => console.log('Banner useTask$'));
   useVisibleTask$(() => console.log('Banner useVisibleTask$'));
   
   return (
-    <div>Banner</div>
+    <div>Banner: {props.image}</div>
   )
 });

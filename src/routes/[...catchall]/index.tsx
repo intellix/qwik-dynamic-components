@@ -1,58 +1,60 @@
-import { component$ } from "@builder.io/qwik";
-import { Link, routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
-import { CmsContextProvider } from "~/components/cms-core/cms-context-provider";
-import { DynamicBlocks } from "~/components/cms-core/dynamic-blocks";
+import { component$, useStore } from "@builder.io/qwik";
+import { DocumentHeadProps, DocumentHeadValue, routeLoader$ } from "@builder.io/qwik-city";
+import { CmsStory } from "~/components/cms-core/cms.types";
+import { Story } from "~/components/cms-core/story";
 
-export const usePage = routeLoader$((event) => {
+export const useStory = routeLoader$<CmsStory | undefined>((event) => {
   const pathname = event.url.pathname;
 
   return {
     '/home/': {
+      title: 'Home',
       body: [
-        { id: Math.random(), component: 'banner' },
-        { id: Math.random(), component: 'accordion' },
-        { id: Math.random(), component: 'button' },
+        { id: Math.random(), component: 'banner', data: { image: 'home.jpg' } },
+        { id: Math.random(), component: 'accordion', data: { title: 'Home FAQ', text: 'Meh...' } },
+        { id: Math.random(), component: 'button', data: { text: 'Click me' } },
       ]
     },
     '/about/': {
+      title: 'About',
       body: [
-        { id: Math.random(), component: 'banner' },
+        { id: Math.random(), component: 'banner', data: { image: 'about.jpg' } },
       ]
     },
     '/contact/': {
+      title: 'Contact',
       body: [
-        { id: Math.random(), component: 'banner' },
-        { id: Math.random(), component: 'accordion' },
+        { id: Math.random(), component: 'banner', data: { image: 'contact.jpg' } },
+        { id: Math.random(), component: 'accordion', data: { title: 'Contact FAQ', text: 'Meh...' } },
       ],
     },
   }[pathname];
 });
 
 export default component$(() => {
-  const page = usePage();
+  const story = useStory();
+  const state = useStore({ isUserLoggedIn: 'false' });
 
   return (
-    <CmsContextProvider>
-      <h1>Hi 👋</h1>
-      <nav>
-        <Link href="/home">Home</Link>&nbsp;
-        <Link href="/about">About</Link>&nbsp;
-        <Link href="/contact" prefetch="js">Contact</Link>&nbsp;
-      </nav>
+    <div>
+      <button onClick$={() => state.isUserLoggedIn = state.isUserLoggedIn === 'true' ? 'false' : 'true'}>Logged In? {state.isUserLoggedIn}</button>
       <hr />
       <div>
-        <DynamicBlocks body={page.value?.body} />
+        <Story story={story} />
       </div>
-    </CmsContextProvider>
+    </div>
   );
 });
 
-export const head: DocumentHead = {
-  title: "Welcome to Qwik",
-  meta: [
-    {
-      name: "description",
-      content: "Qwik site description",
-    },
-  ],
+export function head(props: DocumentHeadProps): DocumentHeadValue {
+  const story = props.resolveValue(useStory);
+  return {
+    title: story?.title ?? 'No Title',
+    meta: [
+      {
+        name: "description",
+        content: "Qwik site description",
+      },
+    ],
+  };
 };

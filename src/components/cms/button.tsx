@@ -1,10 +1,14 @@
 import { component$, useTask$, useVisibleTask$ } from "@builder.io/qwik";
 
-export const Button = component$(() => {
+interface ButtonProps {
+  text: string;
+}
+
+export const Button = component$<ButtonProps>((props) => {
   useTask$(() => console.log('Button useTask$'));
   useVisibleTask$(() => console.log('Button useVisibleTask$'));
   
   return (
-    <div>Button</div>
+    <>Button: <button>{props.text}</button></>
   )
 });
