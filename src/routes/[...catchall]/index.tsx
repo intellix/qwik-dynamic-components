@@ -1,10 +1,7 @@
-import { component$, useContextProvider } from "@builder.io/qwik";
+import { component$ } from "@builder.io/qwik";
 import { Link, routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
-import { ComponentContextId } from "~/components/cms-core/context";
+import { CmsContextProvider } from "~/components/cms-core/cms-context-provider";
 import { DynamicBlocks } from "~/components/cms-core/dynamic-blocks";
-import { Accordion } from "~/components/cms/accordion";
-import { Banner } from "~/components/cms/banner";
-import { Button } from "~/components/cms/button";
 
 export const usePage = routeLoader$((event) => {
   const pathname = event.url.pathname;
@@ -34,25 +31,19 @@ export const usePage = routeLoader$((event) => {
 export default component$(() => {
   const page = usePage();
 
-  useContextProvider(ComponentContextId, {
-    button: Button,
-    banner: Banner,
-    accordion: Accordion,
-  });
-
   return (
-    <>
+    <CmsContextProvider>
       <h1>Hi 👋</h1>
       <nav>
         <Link href="/home">Home</Link>&nbsp;
         <Link href="/about">About</Link>&nbsp;
-        <Link href="/contact">Contact</Link>&nbsp;
+        <Link href="/contact" prefetch="js">Contact</Link>&nbsp;
       </nav>
       <hr />
       <div>
         <DynamicBlocks body={page.value?.body} />
       </div>
-    </>
+    </CmsContextProvider>
   );
 });
 
