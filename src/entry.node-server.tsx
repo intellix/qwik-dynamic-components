@@ -7,7 +7,8 @@
  * - https://qwik.dev/docs/deployments/node/
  *
  */
-import { getRequestEvent } from "@builder.io/qwik-city";
+// TEMP(1.19.2 test): getRequestEvent not in 1.19.2
+const getRequestEvent = (): any => undefined;
 import { createQwikCity } from "@builder.io/qwik-city/middleware/node";
 import qwikCityPlan from "@qwik-city-plan";
 import render from "./entry.ssr";

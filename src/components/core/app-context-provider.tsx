@@ -7,9 +7,9 @@ export interface AppContextProviderProps {
 }
 
 /** A wrapper context provider that provides everything */
-export const AppContextProvider = component$<AppContextProviderProps>(({ hasSession }) => {
+export const AppContextProvider = component$<AppContextProviderProps>(() => {
   useCmsContextProvider();
-  useUserProvider({ hasSession });
+  useUserProvider({ hasSession: false });
 
   return (
     <div>
